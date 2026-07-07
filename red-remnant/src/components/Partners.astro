@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+import { partners } from '../data/content';
+---
+
+<section id="partner" class="px-8 md:px-12 py-28 scroll-mt-28">
+  <div class="max-w-[900px] mx-auto text-center">
+    <!-- Header -->
+    <div class="reveal max-w-[560px] mx-auto mb-16">
+      <span class="text-[12px] font-bold tracking-[2px] uppercase block mb-5" style="color: rgba(248,251,255,0.50);">{partners.label}</span>
+      <h2 class="text-white font-extrabold leading-[1.08] tracking-[-1.5px]" style="font-size: clamp(34px, 4vw, 54px);">
+        {partners.headline} <em class="font-['Playfair_Display'] italic font-medium tracking-[-0.5px]">{partners.headlineItalic}</em>
+      </h2>
+      <p class="text-[16.5px] leading-[1.70] mt-4" style="color: rgba(248,251,255,0.62);">{partners.body}</p>
+    </div>
+
+    <!-- Logos -->
+    <div class="reveal flex flex-wrap items-center justify-center gap-6">
+      {partners.items.map((p) => (
+        p.logo ? (
+          <!-- Real logo: white surface so the brand's own colors and dark wordmark stay legible against the dark section -->
+          <div
+            class="partner-badge partner-badge-logo flex items-center justify-center px-8 rounded-[20px] transition-all duration-300 overflow-hidden"
+            style="background: #ffffff; box-shadow: 0 12px 32px rgba(0,0,0,0.28); min-width: 200px; height: 96px;"
+          >
+            <Image src={p.logo} alt={`${p.name} Logo`} class="partner-logo-img max-h-20 w-auto object-contain transition-transform duration-300" />
+          </div>
+        ) : (
+          <div
+            class="partner-badge flex items-center justify-center px-12 py-9 rounded-[20px] transition-all duration-300"
+            style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); min-width: 220px;"
+          >
+            <span
+              class="text-white font-black tracking-[1px] uppercase select-none"
+              style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(22px, 2.4vw, 28px); opacity: 0.90;"
+            >
+              {p.name}
+            </span>
+          </div>
+        )
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .partner-badge:hover {
+    transform: translateY(-2px);
+  }
+  .partner-badge:not(.partner-badge-logo):hover {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.22);
+  }
+  .partner-badge-logo:hover {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.36);
+  }
+  .partner-badge-logo:hover .partner-logo-img {
+    transform: scale(1.08);
+  }
+</style>

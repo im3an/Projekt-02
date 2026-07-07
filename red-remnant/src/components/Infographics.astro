@@ -1,0 +1,262 @@
+---
+// Three infographic sections replacing Features
+import { Image } from 'astro:assets';
+import SideRays from './SideRays.astro';
+import grassImage from '../assets/images/grass.png';
+---
+
+<!-- ─── 1. DEUTSCHLAND DIGITALISIERUNG STATS ─────────────────────────── -->
+<section class="relative px-8 md:px-20 py-32 bg-void-black">
+  <SideRays
+    speed={2.5}
+    rayColor1="#EAB308"
+    rayColor2="#96c8ff"
+    intensity={2}
+    spread={2}
+    origin="top-right"
+    tilt={0}
+    saturation={1.5}
+    blend={0.75}
+    falloff={1.6}
+    opacity={1.0}
+  />
+  <div class="relative max-w-[1100px] mx-auto">
+
+    <!-- Header -->
+    <div class="mb-16 reveal flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+      <div>
+        <h2 class="font-black leading-[1.05] tracking-[-1.5px] text-white" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(36px,5vw,58px);">
+          Harte Zahlen.<br />
+          <em style="font-family:'Playfair Display',serif; font-style:italic; font-weight:500;">Kein Schönreden.</em>
+        </h2>
+      </div>
+      <p class="text-[14px] leading-[1.65] max-w-[300px]" style="color:rgba(248,251,255,0.55);">Quellen: EU-Kommission DESI 2023, Bitkom, KfW Digitalisierungsbericht.</p>
+    </div>
+
+    <!-- Cards wrapper (relative so grass can drape over the top edge) -->
+    <div class="relative reveal">
+
+    <!-- Grass draped over the top edge of the card cluster -->
+    <Image
+      src={grassImage}
+      alt=""
+      aria-hidden="true"
+      class="absolute left-0 right-0 w-full pointer-events-none select-none hidden md:block"
+      style="top:0; transform: translateY(-32%) scaleX(1.11); transform-origin:center top; z-index:20; filter: drop-shadow(0 12px 16px rgba(20,60,110,0.25));"
+      loading="lazy"
+    />
+
+    <!-- Three cards — unified design language -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <!-- ① DESI Rank -->
+      <div class="reveal delay-1 rounded-2xl p-8 flex flex-col gap-0" style="background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.16);">
+        <!-- Label -->
+        <p class="text-[10px] font-bold tracking-[2.5px] uppercase mb-6" style="color:rgba(248,251,255,0.50);">DESI-Index 2023</p>
+        <!-- Hero number -->
+        <div class="font-black text-white leading-none tracking-[-5px] mb-1" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(88px,11vw,130px);">13</div>
+        <p class="text-[13px] font-semibold mb-1" style="color:rgba(248,251,255,0.50);">von 27 EU-Ländern</p>
+        <!-- Descriptor -->
+        <p class="text-[14px] leading-[1.60] mt-4 mb-8" style="color:rgba(248,251,255,0.70);">Hinter Slowenien, Tschechien und Malta.</p>
+        <!-- Score comparison bars -->
+        <div class="mt-auto space-y-3">
+          <div>
+            <div class="flex justify-between text-[11px] font-medium mb-1.5" style="color:rgba(248,251,255,0.60);">
+              <span>Deutschland</span><span class="font-bold text-white">49.8</span>
+            </div>
+            <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.12);">
+              <div class="desi-bar h-full rounded-full" style="width:0%; background:rgba(255,255,255,0.90); transition:width 1.1s cubic-bezier(0.22,1,0.36,1);"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-[11px] font-medium mb-1.5" style="color:rgba(248,251,255,0.60);">
+              <span>EU-Durchschnitt</span><span style="color:rgba(248,251,255,0.50);">52.3</span>
+            </div>
+            <div class="h-1.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.12);">
+              <div class="eu-bar h-full rounded-full" style="width:0%; background:rgba(255,255,255,0.35); transition:width 1.3s 0.15s cubic-bezier(0.22,1,0.36,1);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② Fax usage -->
+      <div class="reveal delay-2 rounded-2xl p-8 flex flex-col" style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);">
+        <p class="text-[10px] font-bold tracking-[2.5px] uppercase mb-6" style="color:rgba(248,251,255,0.50);">Faxgeräte in Unternehmen</p>
+
+        <!-- Main stat -->
+        <div class="font-black text-white leading-none tracking-[-4px] mb-1" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(88px,11vw,130px);">45<span style="font-size:0.45em; letter-spacing:-2px;">%</span></div>
+        <p class="text-[13px] font-semibold mb-6" style="color:rgba(248,251,255,0.50);">der deutschen Unternehmen</p>
+
+        <!-- Visual comparison bar — proportional -->
+        <div class="mt-auto space-y-3">
+          <div>
+            <div class="flex justify-between text-[11px] font-medium mb-1.5" style="color:rgba(248,251,255,0.60);">
+              <span>Deutschland</span><span class="font-bold text-white">45%</span>
+            </div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.12);">
+              <div class="fax-de-bar h-full rounded-full" style="width:0%; background:rgba(255,255,255,0.90); transition:width 1.1s cubic-bezier(0.22,1,0.36,1);"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-[11px] font-medium mb-1.5" style="color:rgba(248,251,255,0.60);">
+              <span>EU-Durchschnitt</span><span style="color:rgba(248,251,255,0.50);">7%</span>
+            </div>
+            <div class="h-2 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.12);">
+              <div class="fax-eu-bar h-full rounded-full" style="width:0%; background:rgba(255,255,255,0.32); transition:width 1.3s 0.15s cubic-bezier(0.22,1,0.36,1);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Callout -->
+        <div class="mt-6 px-4 py-3 rounded-xl" style="background:rgba(255,255,255,0.08);">
+          <p class="text-[13px] font-semibold text-white">6× über EU-Schnitt</p>
+          <p class="text-[12px] mt-0.5" style="color:rgba(248,251,255,0.55);">Quelle: Bitkom 2023</p>
+        </div>
+      </div>
+
+      <!-- ③ KMU ohne digitale Prozesse -->
+      <div class="reveal delay-3 rounded-2xl p-8 flex flex-col" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.10);">
+        <p class="text-[10px] font-bold tracking-[2.5px] uppercase mb-6" style="color:rgba(248,251,255,0.50);">KMU ohne digitale Kernprozesse</p>
+
+        <!-- SVG Donut — proper, animated -->
+        <div class="flex items-center gap-6 mb-6">
+          <div class="relative flex-shrink-0" style="width:110px; height:110px;">
+            <svg width="110" height="110" viewBox="0 0 110 110" class="donut-svg" style="transform:rotate(-90deg);">
+              <!-- Track -->
+              <circle cx="55" cy="55" r="44" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="10"/>
+              <!-- Fill — 67% of 2πr = 67% of 276.46 = 185.2 -->
+              <circle
+                cx="55" cy="55" r="44" fill="none"
+                stroke="rgba(255,255,255,0.88)" stroke-width="10"
+                stroke-linecap="round"
+                stroke-dasharray="276.46"
+                class="donut-arc"
+                style="stroke-dashoffset: 276.46; transition: stroke-dashoffset 1.4s cubic-bezier(0.22,1,0.36,1);"
+              />
+            </svg>
+            <!-- Center label -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span class="font-black text-white leading-none" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:26px;">67%</span>
+            </div>
+          </div>
+          <!-- Legend -->
+          <div class="space-y-2.5">
+            <div class="flex items-center gap-2">
+              <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:rgba(255,255,255,0.88);"></div>
+              <span class="text-[12px]" style="color:rgba(248,251,255,0.70);">Analog / Excel</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background:rgba(255,255,255,0.18);"></div>
+              <span class="text-[12px]" style="color:rgba(248,251,255,0.50);">Digitalisiert</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero number -->
+        <div class="font-black text-white leading-none tracking-[-4px] mb-1" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(60px,8vw,96px);">2/3</div>
+        <p class="text-[13px] font-semibold mb-4" style="color:rgba(248,251,255,0.50);">aller deutschen KMU</p>
+
+        <p class="text-[14px] leading-[1.65] mt-auto" style="color:rgba(248,251,255,0.68);">verwalten geschäftskritische Prozesse noch analog oder per Excel.</p>
+        <p class="text-[12px] mt-4" style="color:rgba(248,251,255,0.50);">Quelle: KfW Digitalisierungsbericht 2023</p>
+      </div>
+
+    </div>
+    </div><!-- /cards wrapper -->
+  </div>
+</section>
+
+
+<!-- ─── 2. TIME SAVINGS BREAKDOWN ────────────────────────────────────── -->
+<section class="px-8 md:px-20 py-32">
+  <div class="max-w-[1100px] mx-auto">
+
+    <div class="mb-20 reveal">
+      <h2 class="font-black leading-[1.05] tracking-[-1.5px] text-white" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(40px,5vw,64px);">
+        Was Digitalisierung<br />
+        <em style="font-family:'Playfair Display',serif; font-style:italic; font-weight:500;">konkret einspart.</em>
+      </h2>
+    </div>
+
+    <div class="space-y-px" style="border-radius:24px; overflow:hidden; border:1px solid rgba(255,255,255,0.14);">
+      {[
+        {
+          process:"Rechnungsfreigabe",
+          before:"4.5h", after:"18 min", saving:"96%",
+          desc:"Papierrechnung einscannen, weiterleiten, unterschreiben, ablegen: vollautomatische Freigabe-Pipeline.",
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>`,
+        },
+        {
+          process:"Mitarbeiter-Onboarding",
+          before:"3 Tage", after:"4h", saving:"83%",
+          desc:"Formulare, IT-Zugänge, Einweisungen manuell: digitales Onboarding-System mit automatischen Workflows.",
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+        },
+        {
+          process:"Wöchentliches Reporting",
+          before:"6h / Wo.", after:"30 min", saving:"92%",
+          desc:"Daten aus fünf Quellen manuell zusammenführen: Live-Dashboard mit automatischem Bericht-Export.",
+          icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+        },
+      ].map((row, i) => (
+        <div class={`reveal delay-${i+1} grid grid-cols-1 md:grid-cols-[1fr_148px_148px_196px]`} style="background:rgba(255,255,255,0.07);">
+          <!-- Process -->
+          <div class="px-8 py-8 flex items-start gap-5">
+            <!-- Clean white icon in a glass pill -->
+            <div class="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center mt-0.5" style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.22);">
+              <Fragment set:html={row.icon} />
+            </div>
+            <div>
+              <div class="text-[16px] font-bold text-white mb-2">{row.process}</div>
+              <div class="text-[14px] leading-[1.60]" style="color:rgba(248,251,255,0.65);">{row.desc}</div>
+            </div>
+          </div>
+          <!-- Before -->
+          <div class="px-5 py-8 flex flex-col justify-center text-center border-l" style="border-color:rgba(255,255,255,0.10);">
+            <div class="text-[10px] font-bold tracking-[2px] uppercase mb-3" style="color:rgba(248,251,255,0.55);">Vorher</div>
+            <div class="font-black leading-tight" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(18px,2vw,24px); color:rgba(255,255,255,0.45); text-decoration:line-through; text-decoration-color:rgba(255,255,255,0.28); word-break:break-word;">{row.before}</div>
+          </div>
+          <!-- After -->
+          <div class="px-5 py-8 flex flex-col justify-center text-center border-l" style="border-color:rgba(255,255,255,0.10);">
+            <div class="text-[10px] font-bold tracking-[2px] uppercase mb-3" style="color:rgba(248,251,255,0.55);">Nachher</div>
+            <div class="font-black text-white leading-tight" style="font-family:'Plus Jakarta Sans',sans-serif; font-size:clamp(18px,2vw,24px);">{row.after}</div>
+          </div>
+          <!-- Saving -->
+          <div class="px-6 py-8 flex flex-col justify-center border-l" style="border-color:rgba(255,255,255,0.10);">
+            <div class="text-[10px] font-bold tracking-[2px] uppercase mb-3" style="color:rgba(248,251,255,0.55);">Zeitersparnis</div>
+            <div class="flex items-center gap-3">
+              <div class="flex-1 h-2 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.14);">
+                <div class="saving-bar h-full rounded-full" style={`width:0%; background:rgba(255,255,255,0.85); transition:width 1.2s ${0.15+i*0.15}s cubic-bezier(0.22,1,0.36,1);`} data-width={row.saving}></div>
+              </div>
+              <span class="text-[15px] font-black text-white flex-shrink-0">{row.saving}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+
+<script>
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      // DESI score bars (DE: 49.8/100, EU: 52.3/100 — scaled to 60% max for visual balance)
+      entry.target.querySelectorAll('.desi-bar').forEach((el: Element) => { (el as HTMLElement).style.width = '55%'; });
+      entry.target.querySelectorAll('.eu-bar').forEach((el: Element) => { (el as HTMLElement).style.width = '60%'; });
+      // Fax bars (DE: 45%, EU: 7%)
+      entry.target.querySelectorAll('.fax-de-bar').forEach((el: Element) => { (el as HTMLElement).style.width = '45%'; });
+      entry.target.querySelectorAll('.fax-eu-bar').forEach((el: Element) => { (el as HTMLElement).style.width = '7%'; });
+      // SVG donut arc — 67% of 276.46 = 185.2 → offset = 276.46 - 185.2 = 91.26
+      entry.target.querySelectorAll('.donut-arc').forEach((el: Element) => {
+        (el as SVGCircleElement).style.strokeDashoffset = '91.26';
+      });
+      // Time savings bars
+      entry.target.querySelectorAll('.saving-bar').forEach((el: Element) => {
+        (el as HTMLElement).style.width = (el as HTMLElement).dataset.width || '80%';
+      });
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('section').forEach(s => barObserver.observe(s));
+</script>

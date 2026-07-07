@@ -1,0 +1,58 @@
+---
+import { clients } from '../data/content';
+
+const initials = (name: string) =>
+  name
+    .split(' ')
+    .filter((w) => /^[A-ZÄÖÜ]/.test(w))
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('') || name.slice(0, 2).toUpperCase();
+---
+
+<section id="kunden" class="px-8 md:px-12 py-28 scroll-mt-28">
+  <div class="max-w-[980px] mx-auto">
+    <!-- Header -->
+    <div class="reveal text-center max-w-[640px] mx-auto mb-16">
+      <span class="text-[12px] font-bold tracking-[2px] uppercase block mb-5" style="color: rgba(248,251,255,0.50);">{clients.label}</span>
+      <h2 class="text-white font-extrabold leading-[1.08] tracking-[-1.5px]" style="font-size: clamp(34px, 4vw, 54px);">
+        {clients.headline} <em class="font-['Playfair_Display'] italic font-medium tracking-[-0.5px]">{clients.headlineItalic}</em>
+      </h2>
+      <p class="text-[16.5px] leading-[1.70] max-w-[520px] mx-auto mt-4" style="color: rgba(248,251,255,0.62);">{clients.body}</p>
+    </div>
+
+    <!-- Client cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {clients.items.map((c, i) => (
+        <div
+          class={`reveal delay-${i + 1} rounded-[24px] p-8 md:p-9 flex flex-col`}
+          style="background: rgba(255,255,255,0.11); backdrop-filter: blur(28px) saturate(1.4); -webkit-backdrop-filter: blur(28px) saturate(1.4); border: 1px solid rgba(255,255,255,0.24); box-shadow: 0 24px 60px -24px rgba(10,40,80,0.45);"
+        >
+          <!-- Name + sector -->
+          <div class="flex items-center gap-4 mb-6">
+            <div
+              class="w-12 h-12 rounded-2xl flex items-center justify-center text-[15px] font-black text-white flex-shrink-0"
+              style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.30); font-family: 'Plus Jakarta Sans', sans-serif;"
+            >
+              {initials(c.name)}
+            </div>
+            <div>
+              <div class="text-[15.5px] font-bold text-white leading-tight">{c.name}</div>
+              <div class="text-[13px] mt-0.5" style="color: rgba(248,251,255,0.55);">{c.sector}</div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <p class="text-[15px] leading-[1.65] mb-7" style="color: rgba(248,251,255,0.75);">{c.description}</p>
+
+          <!-- Highlights -->
+          <div class="flex flex-wrap gap-2 mt-auto pt-2">
+            {c.highlights.map((h) => (
+              <span class="text-[12px] font-medium px-3 py-1.5 rounded-lg" style="background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.18); color: rgba(248,251,255,0.72);">{h}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

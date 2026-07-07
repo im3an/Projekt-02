@@ -1,0 +1,69 @@
+---
+import { brand, nav, booking } from '../data/content';
+---
+
+<header
+  id="main-nav"
+  class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between transition-all duration-300"
+  style="
+    width: min(1040px, calc(100vw - 40px));
+    padding: 6px 6px 6px 28px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(28px) saturate(1.6);
+    -webkit-backdrop-filter: blur(28px) saturate(1.6);
+    border: 1px solid rgba(255,255,255,0.30);
+    box-shadow: 0 8px 32px rgba(20,60,110,0.16), inset 0 1px 0 rgba(255,255,255,0.22);
+  "
+>
+  <!-- Logo -->
+  <a href={brand.url} class="text-[17px] font-extrabold tracking-tight text-white no-underline flex-shrink-0">
+    {brand.name}<span class="hidden sm:inline font-medium opacity-55"> </span>
+  </a>
+
+  <!-- Nav links -->
+  <nav class="hidden md:flex gap-8 absolute left-1/2 -translate-x-1/2">
+    {nav.links.map((link) => (
+      <a
+        href={link.href}
+        class="text-[14px] font-medium text-white/70 hover:text-white no-underline transition-colors duration-200 whitespace-nowrap"
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
+
+  <!-- Right side: ghost login + pill CTA -->
+  <div class="flex items-center gap-1 flex-shrink-0">
+
+    <!-- Oversized pill CTA — extends slightly beyond the bar like in the reference -->
+    <a
+      href={nav.cta.primary.href}
+      data-cal-link={booking.calLink}
+      data-cal-namespace={booking.namespace}
+      class="nav-cta-pill no-underline cursor-pointer transition-all duration-200 text-white font-bold text-[14px] whitespace-nowrap"
+      style="
+        padding: 13px 28px;
+        border-radius: 999px;
+        background: #3b7dd8;
+        border: 1px solid rgba(255,255,255,0.25);
+        box-shadow: 0 4px 20px rgba(30,80,180,0.45), inset 0 1px 0 rgba(255,255,255,0.20);
+        margin: -2px -2px -2px 0;
+      "
+    >
+      {nav.cta.primary.label}
+    </a>
+  </div>
+</header>
+
+<style>
+  .nav-cta-pill:hover,
+  .nav-cta-pill:focus-visible {
+    background: #2f6ec8;
+    transform: scale(1.03);
+  }
+  .nav-cta-pill:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.85);
+    outline-offset: 2px;
+  }
+</style>

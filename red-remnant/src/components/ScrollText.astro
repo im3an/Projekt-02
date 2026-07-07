@@ -1,0 +1,187 @@
+---
+// Scroll-locked section — 300vh tall, sticky viewport, 2 text reveals
+import { Image } from 'astro:assets';
+import { narrative } from '../data/content';
+import bg2Image from '../assets/images/bg2.png';
+---
+
+<div id="scroll-text-section" class="scroll-text-section relative" style="height: 220vh; margin-top: -4px;">
+  <!-- Sticky container -->
+  <div class="scroll-text-sticky sticky top-0 w-full overflow-hidden" style="height: 100vh;">
+
+    <!-- Background image -->
+    <Image src={bg2Image} alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" loading="lazy" />
+    <!-- Radial vignette — darkens edges so centred text always pops -->
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(0,0,0,0.45) 100%);"></div>
+    <!-- Bottom fade only — top is handled by the hero's own scrim above -->
+    <div class="absolute bottom-0 left-0 right-0 pointer-events-none" style="height: 32%; background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%);"></div>
+
+
+    <!-- Centered content -->
+    <div class="relative h-full flex flex-col items-center justify-center px-6 text-center">
+
+      <!-- Progress indicator -->
+      <div class="absolute left-8 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-2.5">
+        <div id="dot-1" class="w-1.5 h-1.5 rounded-full transition-all duration-500" style="background: rgba(255,255,255,0.30);"></div>
+        <div id="dot-2" class="w-1.5 h-1.5 rounded-full transition-all duration-500" style="background: rgba(255,255,255,0.30);"></div>
+      </div>
+
+      <!-- TEXT BLOCK 1 -->
+      <div
+        id="scroll-text-1"
+        class="scroll-text-block absolute inset-0 flex flex-col items-center justify-center px-6 transition-all duration-700"
+        style="opacity: 0; filter: blur(20px); transform: scale(0.96); pointer-events: none; will-change: opacity, filter, transform;"
+      >
+        <p class="text-[13px] font-semibold tracking-[3px] uppercase mb-6" style="color: rgba(248,251,255,0.65);">{narrative.problem.label}</p>
+        <h2
+          class="max-w-[780px] leading-[1.08] font-black tracking-[-2px] text-white"
+          style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(40px, 6vw, 80px);"
+        >
+          {narrative.problem.lines[0]}<br />
+          <em class="font-normal not-italic" style="font-family: 'Playfair Display', Georgia, serif; font-style: italic;">{narrative.problem.lines[1]}</em><br />
+          {narrative.problem.lines[2]}
+        </h2>
+      </div>
+
+      <!-- TEXT BLOCK 2 -->
+      <div
+        id="scroll-text-2"
+        class="scroll-text-block absolute inset-0 flex flex-col items-center justify-center px-6 transition-all duration-700"
+        style="opacity: 0; filter: blur(20px); transform: scale(0.96); pointer-events: none; will-change: opacity, filter, transform;"
+      >
+        <p class="text-[13px] font-semibold tracking-[3px] uppercase mb-6" style="color: rgba(248,251,255,0.65);">{narrative.approach.label}</p>
+        <h2
+          class="max-w-[780px] leading-[1.08] font-black tracking-[-2px] text-white"
+          style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(40px, 6vw, 80px);"
+        >
+          {narrative.approach.lines[0]}<br />
+          <em class="font-normal not-italic" style="font-family: 'Playfair Display', Georgia, serif; font-style: italic;">{narrative.approach.lines[1]}</em><br />
+          {narrative.approach.lines[2]}
+        </h2>
+      </div>
+
+      <!-- Scroll hint (fades out once scrolling starts) -->
+      <div id="scroll-hint" class="absolute bottom-10 flex flex-col items-center gap-2 transition-opacity duration-300" style="opacity: 0.50;">
+        <span class="text-[11px] font-medium tracking-[2px] uppercase text-white/60">Scroll</span>
+        <div class="w-px h-8 overflow-hidden" style="background: rgba(255,255,255,0.15);">
+          <div class="w-full h-4 animate-bounce" style="background: rgba(255,255,255,0.55); border-radius: 2px;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-text-section { height: auto !important; }
+    .scroll-text-sticky {
+      position: static !important;
+      height: auto !important;
+      padding-block: 8vh;
+    }
+    .scroll-text-block {
+      position: static !important;
+      opacity: 1 !important;
+      filter: none !important;
+      transform: none !important;
+      pointer-events: auto !important;
+      padding-block: 4vh;
+    }
+    #dot-1, #dot-2, #scroll-hint { display: none !important; }
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    // Reduced motion: both blocks render in normal flow via CSS above, skip the scroll-jack entirely.
+  } else {
+  const section = document.getElementById('scroll-text-section')!;
+  const text1   = document.getElementById('scroll-text-1')!;
+  const text2   = document.getElementById('scroll-text-2')!;
+  const dot1    = document.getElementById('dot-1')!;
+  const dot2    = document.getElementById('dot-2')!;
+  const hint    = document.getElementById('scroll-hint')!;
+
+  const show = (el: HTMLElement) => {
+    el.style.opacity = '1'; el.style.filter = 'blur(0px)';
+    el.style.transform = 'scale(1)'; el.style.pointerEvents = 'auto';
+  };
+  const hide = (el: HTMLElement) => {
+    el.style.opacity = '0'; el.style.filter = 'blur(18px)';
+    el.style.transform = 'scale(0.97)'; el.style.pointerEvents = 'none';
+  };
+
+  // Cache section metrics — one getBoundingClientRect on init/resize only
+  let sectionAbsTop = 0;
+  let sectionTotal  = 0;
+  function cacheMetrics() {
+    const r   = section.getBoundingClientRect();
+    sectionAbsTop = window.scrollY + r.top;
+    sectionTotal  = section.offsetHeight - window.innerHeight;
+  }
+  cacheMetrics();
+  window.addEventListener('resize', cacheMetrics, { passive: true });
+
+  const ease = (t: number) => t * t * (3 - 2 * t);
+
+  function onScroll() {
+    const scrolled = window.scrollY - sectionAbsTop;
+    const progress = Math.max(0, Math.min(1, scrolled / sectionTotal));
+
+    hint.style.opacity = scrolled > 20 ? '0' : '0.50';
+
+    if (progress < 0.05) {
+      const t = ease(progress / 0.05);
+      text1.style.opacity = String(t);
+      text1.style.filter = `blur(${(1 - t) * 18}px)`;
+      text1.style.transform = `scale(${0.96 + t * 0.04})`;
+      text1.style.pointerEvents = 'auto';
+      hide(text2);
+      dot1.style.background = 'rgba(255,255,255,0.30)';
+      dot2.style.background = 'rgba(255,255,255,0.30)';
+
+    } else if (progress < 0.38) {
+      show(text1); hide(text2);
+      dot1.style.background = 'rgba(255,255,255,0.90)';
+      dot1.style.width = '6px'; dot1.style.height = '18px'; dot1.style.borderRadius = '4px';
+      dot2.style.background = 'rgba(255,255,255,0.30)';
+      dot2.style.width = ''; dot2.style.height = ''; dot2.style.borderRadius = '';
+
+    } else if (progress < 0.55) {
+      const t = ease((progress - 0.38) / 0.17);
+      text1.style.opacity = String(1 - t);
+      text1.style.filter = `blur(${t * 18}px)`;
+      text1.style.transform = `scale(${1 - t * 0.04})`;
+      text1.style.pointerEvents = 'none';
+      text2.style.opacity = String(t);
+      text2.style.filter = `blur(${(1 - t) * 18}px)`;
+      text2.style.transform = `scale(${0.96 + t * 0.04})`;
+      text2.style.pointerEvents = t > 0.5 ? 'auto' : 'none';
+      dot1.style.background = 'rgba(255,255,255,0.30)';
+      dot1.style.width = ''; dot1.style.height = ''; dot1.style.borderRadius = '';
+      dot2.style.background = 'rgba(255,255,255,0.90)';
+      dot2.style.width = '6px'; dot2.style.height = '18px'; dot2.style.borderRadius = '4px';
+
+    } else {
+      hide(text1); show(text2);
+      dot1.style.background = 'rgba(255,255,255,0.30)';
+      dot1.style.width = ''; dot1.style.height = ''; dot1.style.borderRadius = '';
+      dot2.style.background = 'rgba(255,255,255,0.90)';
+      dot2.style.width = '6px'; dot2.style.height = '18px'; dot2.style.borderRadius = '4px';
+    }
+  }
+
+  // Throttle: at most one DOM update per animation frame
+  let rafPending = false;
+  window.addEventListener('scroll', () => {
+    if (!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(() => { onScroll(); rafPending = false; });
+    }
+  }, { passive: true });
+
+  onScroll();
+  }
+</script>

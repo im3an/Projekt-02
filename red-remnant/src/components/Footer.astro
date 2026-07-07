@@ -1,0 +1,43 @@
+---
+import { brand, footer } from '../data/content';
+---
+
+<footer class="relative overflow-hidden">
+
+  <!-- ── Footer bar ────────────────────────────────────────────────── -->
+  <div
+    class="relative px-12 py-10 flex flex-wrap items-center justify-between gap-5 bg-void-black"
+    style="border-top: 1px solid rgba(255,255,255,0.08);"
+  >
+    <div class="text-[16px] font-extrabold tracking-tight text-white">
+      {brand.name} <span class="opacity-40 font-normal">{brand.suffix} &middot; {brand.location} &copy; {new Date().getFullYear()}</span>
+    </div>
+
+    <nav class="flex flex-wrap gap-7">
+      {footer.links.map((link) => (
+        <a
+          href={link.href}
+          class="footer-link text-[13px] font-medium no-underline transition-colors duration-200"
+          style="color: rgba(248,251,255,0.45);"
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="text-[12.5px]" style="color: rgba(248,251,255,0.50);">{footer.copy}</div>
+  </div>
+
+</footer>
+
+<style>
+  .footer-link:hover,
+  .footer-link:focus-visible {
+    color: rgba(248, 251, 255, 0.85);
+  }
+  .footer-link:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+</style>

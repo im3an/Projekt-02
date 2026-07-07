@@ -1,0 +1,194 @@
+---
+import { Image } from 'astro:assets';
+import { products } from '../data/content';
+import treeImage from '../assets/images/tree.png';
+
+const statusColor: Record<string, string> = {
+  'In Betrieb':      '74,222,128',   // green
+  'In Entwicklung':  '96,165,250',   // blue
+  'In Produktion':   '249,115,22',   // orange
+};
+
+// Asymmetric float layout — base rotation, horizontal nudge, vertical overlap, animation timing
+const layout = [
+  { rot: -4,  align: 'mr-auto',           tx: '2%',   mt: '0',     dur: '7s',   delay: '0s',    z: 30 },
+  { rot:  3.5, align: 'ml-auto',          tx: '-3%',  mt: '-60px', dur: '8.5s', delay: '-2s',   z: 20 },
+  { rot: -2,  align: 'mx-auto md:ml-[12%]', tx: '0',  mt: '-50px', dur: '7.8s', delay: '-4s',   z: 10 },
+];
+---
+
+<section id="produkte" class="relative px-8 md:px-20 py-28 scroll-mt-28 overflow-hidden bg-sky-dusk">
+  <!-- Tree background — masked to fade into the surrounding sky gradient -->
+  <div class="absolute inset-0 pointer-events-none" style="-webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);">
+    <Image src={treeImage} alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover object-right" loading="lazy" />
+    <!-- Blue veil: stronger on the left (header legibility), lighter on the right (tree stays visible) -->
+    <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(28,86,144,0.88) 0%, rgba(38,108,172,0.66) 60%, rgba(44,116,178,0.52) 100%);"></div>
+  </div>
+
+  <div class="relative z-10 max-w-[1100px] mx-auto">
+    <!-- Header -->
+    <div class="reveal max-w-[640px] mb-20">
+      <span class="text-[12px] font-bold tracking-[2px] uppercase block mb-5" style="color: rgba(248,251,255,0.50);">{products.label}</span>
+      <h2 class="text-white font-extrabold leading-[1.08] tracking-[-1.5px]" style="font-size: clamp(34px, 4vw, 54px);">
+        {products.headline} <em class="font-['Playfair_Display'] italic font-medium tracking-[-0.5px]">{products.headlineItalic}</em>
+      </h2>
+      <p class="text-[16.5px] leading-[1.70] mt-4" style="color: rgba(248,251,255,0.62);">{products.body}</p>
+    </div>
+
+    <!-- Floating 3D card stack -->
+    <div class="product-scene relative">
+      {products.items.map((p, i) => {
+        const rgb = statusColor[p.status] || '255,255,255';
+        const L = layout[i];
+        return (
+          <div
+            class={`floater reveal delay-${i + 1} ${L.align}`}
+            style={`--mt:${L.mt}; --tx:${L.tx}; --dur:${L.dur}; --delay:${L.delay}; z-index:${L.z};`}
+          >
+            <div
+              class="card3d relative rounded-[24px] p-8 md:p-10"
+              data-rot={L.rot}
+              style={`--rot:${L.rot}deg;
+                background: linear-gradient(135deg, rgba(8,28,62,0.52), rgba(6,22,50,0.42));
+                backdrop-filter: blur(26px) saturate(1.4); -webkit-backdrop-filter: blur(26px) saturate(1.4);
+                border: 1px solid rgba(255,255,255,0.18);
+                box-shadow: 0 30px 70px -20px rgba(10,40,80,0.55), inset 0 1px 0 rgba(255,255,255,0.18);`}
+            >
+              <!-- Status pill, top-right — neutral glass, white text, colored dot -->
+              <span
+                class="absolute top-7 right-7 inline-flex items-center gap-2 text-[12px] font-semibold px-3 py-1.5 rounded-full text-white whitespace-nowrap"
+                style="background: rgba(15,40,75,0.40); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.25); transform: translateZ(40px);"
+              >
+                <span class="w-2 h-2 rounded-full flex-shrink-0" style={`background: rgb(${rgb}); box-shadow: 0 0 8px rgba(${rgb},0.9);`}></span>
+                {p.status}
+              </span>
+
+              <!-- Name + tag, lifted forward in 3D -->
+              <div style="transform: translateZ(55px);">
+                <h3 class="text-white font-black tracking-[-1px] leading-[0.95] mb-2 max-w-[78%]" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(30px, 4vw, 44px);">{p.name}</h3>
+                <p class="text-[13px] font-semibold tracking-[1px] uppercase mb-6" style="color: rgba(248,251,255,0.55);">{p.tag}</p>
+              </div>
+
+              <!-- Description -->
+              <p class="text-[15.5px] leading-[1.65] max-w-[560px] mb-7" style="color: rgba(248,251,255,0.82); transform: translateZ(30px);">{p.description}</p>
+
+              <!-- Stack chips -->
+              <div class="flex flex-wrap gap-2" style="transform: translateZ(25px);">
+                {p.stack.map((s) => (
+                  <span class="text-[12px] font-medium px-3 py-1.5 rounded-lg" style="background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.20); color: rgba(248,251,255,0.78);">{s}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .floater {
+    width: 100%;
+    max-width: 640px;
+    margin-top: var(--mt, 0);
+    transform: translateX(var(--tx, 0));
+    animation: floaty var(--dur, 8s) ease-in-out var(--delay, 0s) infinite;
+    will-change: transform;
+    perspective: 1400px;
+    contain: layout style;
+  }
+  @keyframes floaty {
+    0%, 100% { transform: translateX(var(--tx)) translateY(0); }
+    50%      { transform: translateX(var(--tx)) translateY(-16px); }
+  }
+
+  .card3d {
+    transform-style: preserve-3d;
+    transform: rotate(var(--rot));
+    will-change: transform, opacity;
+    transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.45s ease,
+                opacity 0.38s ease;
+  }
+
+  /* On small screens: drop the collage, stack cleanly */
+  @media (max-width: 767px) {
+    .floater {
+      max-width: 100%;
+      margin-top: 0 !important;
+      margin-bottom: 18px;
+      transform: none !important;
+      animation: none;
+    }
+    .card3d { transform: none !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floater { animation: none; }
+  }
+</style>
+
+<script>
+  const scene = document.querySelector<HTMLElement>('.product-scene');
+  const isTouch = window.matchMedia('(max-width: 767px)').matches;
+
+  if (scene && !isTouch) {
+    const floaters = Array.from(scene.querySelectorAll<HTMLElement>('.floater'));
+
+    const SHADOW_BASE  = '0 30px 70px -20px rgba(10,40,80,0.55), inset 0 1px 0 rgba(255,255,255,0.18)';
+    const SHADOW_FRONT = '0 55px 110px -25px rgba(4,14,36,0.90), inset 0 1px 0 rgba(255,255,255,0.22)';
+    const BG_BASE  = 'linear-gradient(135deg, rgba(8,28,62,0.52), rgba(6,22,50,0.42))';
+    const BG_FRONT = 'linear-gradient(135deg, rgba(6,20,50,0.90), rgba(4,16,42,0.84))';
+    const BD_BASE  = 'blur(26px) saturate(1.4)';
+    const BD_FRONT = 'blur(40px) saturate(1.9)';
+
+    floaters.forEach((f) => { f.dataset.z = f.style.zIndex || '1'; });
+
+    const applyStyle = (card: HTMLElement, shadow: string, bg: string, bd: string) => {
+      card.style.boxShadow = shadow;
+      card.style.background = bg;
+      card.style.backdropFilter = bd;
+      (card.style as any).webkitBackdropFilter = bd;
+    };
+
+    const reset = () => {
+      floaters.forEach((f) => {
+        const card = f.querySelector<HTMLElement>('.card3d')!;
+        const base = parseFloat(card.dataset.rot || '0');
+        f.style.zIndex = f.dataset.z!;
+        f.style.animationPlayState = 'running';
+        card.style.transform = `rotate(${base}deg) scale(1) translateY(0)`;
+        card.style.filter = 'none';
+        card.style.opacity = '1';
+        applyStyle(card, SHADOW_BASE, BG_BASE, BD_BASE);
+      });
+    };
+
+    floaters.forEach((f, idx) => {
+      f.addEventListener('pointerenter', () => {
+        floaters.forEach((other, j) => {
+          const card = other.querySelector<HTMLElement>('.card3d')!;
+          const base = parseFloat(card.dataset.rot || '0');
+          other.style.animationPlayState = 'paused';
+
+          if (j === idx) {
+            other.style.zIndex = '999';
+            card.style.transform = 'rotate(0deg) translateY(-22px) scale(1.07)';
+            card.style.filter = 'none';
+            card.style.opacity = '1';
+            applyStyle(card, SHADOW_FRONT, BG_FRONT, BD_FRONT);
+          } else {
+            other.style.zIndex = other.dataset.z!;
+            // Push receding cards far back so they don't bleed through
+            card.style.transform = `rotate(${base}deg) scale(0.84) translateY(44px)`;
+            card.style.filter = 'blur(3px)';
+            card.style.opacity = '0.18';
+            applyStyle(card, SHADOW_BASE, BG_BASE, BD_BASE);
+          }
+        });
+      });
+    });
+
+    scene.addEventListener('pointerleave', reset);
+  }
+</script>

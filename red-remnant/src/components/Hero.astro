@@ -1,0 +1,123 @@
+---
+import { Image } from 'astro:assets';
+import { hero } from '../data/content';
+import bgImage from '../assets/images/bg.png';
+---
+
+<section class="relative h-screen flex flex-col items-center justify-center text-center px-6 pt-36 pb-24 overflow-hidden">
+  <!-- Hero background image -->
+  <Image
+    src={bgImage}
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 w-full h-full object-cover object-center -z-10"
+    loading="eager"
+    fetchpriority="high"
+  />
+  <!-- Bottom scrim — tall and soft so it dissolves into the next section without a hard seam -->
+  <div class="absolute bottom-0 left-0 right-0 pointer-events-none -z-[1]" style="height: 75%; background: linear-gradient(to top, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.18) 45%, transparent 100%);"></div>
+  <!-- Badge -->
+  <div
+    class="inline-flex items-center gap-2 px-[18px] py-[7px] rounded-full text-[13px] font-medium tracking-wide mb-10"
+    style="background: rgba(255,255,255,0.16); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.32); color: rgba(248,251,255,0.80);"
+  >
+    <span class="w-[7px] h-[7px] rounded-full inline-block" style="background: rgba(255,255,255,0.85); box-shadow: 0 0 8px rgba(255,255,255,0.7);"></span>
+    {hero.badge}
+  </div>
+
+  <!-- Headline -->
+  <h1 class="font-black text-white leading-[0.97] tracking-[-3px] max-w-[900px]" style="font-size: clamp(52px, 8vw, 108px); font-family: 'Plus Jakarta Sans', sans-serif;">
+    {hero.headline}
+    <em class="block font-normal not-italic text-white/90 leading-[1.08] tracking-[-1px] mt-1" style="font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: clamp(44px, 7vw, 94px);">
+      {hero.subline}
+    </em>
+  </h1>
+
+  <!-- Body -->
+  <p class="max-w-[520px] text-[17px] leading-[1.65] font-normal mt-8" style="color: rgba(248,251,255,0.70);">
+    {hero.body}
+  </p>
+
+  <!-- Social proof — morphing client logos (blur + rotate) -->
+  <div class="flex flex-col items-center gap-5 mt-14">
+    <p class="text-[11px] font-semibold tracking-[3px] uppercase" style="color: rgba(248,251,255,0.55); text-shadow: 0 1px 12px rgba(0,0,0,0.6);">{hero.proof.label}</p>
+
+    <div id="client-morph" class="client-motion-only relative flex items-center justify-center" style="height: 40px; min-width: 280px; perspective: 700px;">
+      {hero.proof.clients.map((name, i) => (
+        <span
+          class="client-slide absolute whitespace-nowrap text-[19px] md:text-[22px] font-black tracking-[-0.5px] text-white"
+          data-ci={i}
+          style="font-family: 'Plus Jakarta Sans', sans-serif; text-shadow: 0 2px 16px rgba(0,0,0,0.7); will-change: opacity, filter, transform;"
+        >{name}</span>
+      ))}
+    </div>
+
+    <!-- Dot indicators -->
+    <div class="client-motion-only flex items-center gap-1.5">
+      {hero.proof.clients.map((_, i) => (
+        <span class="client-dot rounded-full transition-all duration-500" data-di={i}
+          style={`height: 5px; width: ${i === 0 ? '18px' : '5px'}; background: ${i === 0 ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.25)'}; border-radius: 9px;`}></span>
+      ))}
+    </div>
+
+    <!-- Static fallback for prefers-reduced-motion, hidden by default -->
+    <p class="client-static-list hidden text-[16px] font-bold tracking-[-0.3px] text-white text-center max-w-[420px]" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+      {hero.proof.clients.join(' · ')}
+    </p>
+  </div>
+</section>
+
+<style>
+
+  @media (prefers-reduced-motion: reduce) {
+    .client-motion-only { display: none; }
+    .client-static-list { display: block; }
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const slides = Array.from(document.querySelectorAll<HTMLElement>('.client-slide'));
+  const dots   = Array.from(document.querySelectorAll<HTMLElement>('.client-dot'));
+  const TOTAL  = slides.length;
+  let current  = 0;
+
+  if (!prefersReducedMotion) {
+
+  const hideStyle = (el: HTMLElement) => {
+    el.style.opacity   = '0';
+    el.style.filter    = 'blur(12px)';
+    el.style.transform = 'rotateX(40deg) translateY(8px) scale(0.94)';
+  };
+  const showStyle = (el: HTMLElement) => {
+    el.style.opacity   = '1';
+    el.style.filter    = 'blur(0px)';
+    el.style.transform = 'rotateX(0deg) translateY(0) scale(1)';
+  };
+
+  slides.forEach((el, i) => {
+    el.style.willChange = 'opacity, filter, transform';
+    el.style.transition = 'opacity 0.6s ease, filter 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1)';
+    i === 0 ? showStyle(el) : hideStyle(el);
+  });
+
+  function advance() {
+    const prev = current;
+    current = (current + 1) % TOTAL;
+
+    // outgoing rotates/blurs away upward
+    slides[prev].style.opacity   = '0';
+    slides[prev].style.filter    = 'blur(12px)';
+    slides[prev].style.transform = 'rotateX(-40deg) translateY(-8px) scale(0.94)';
+
+    showStyle(slides[current]);
+
+    dots.forEach((d, i) => {
+      d.style.width      = i === current ? '18px' : '5px';
+      d.style.background = i === current ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.25)';
+    });
+  }
+
+  setInterval(advance, 2600);
+  }
+</script>

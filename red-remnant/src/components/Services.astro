@@ -1,0 +1,270 @@
+---
+import { services } from '../data/content';
+// HINWEIS: Die großen Kacheln sind Platzhalter (zeigen aktuell das jeweilige Leistungs-Icon).
+// Später einfach durch echte Logos/Bilder ersetzen — z.B. <img src="/leistungen/it.png" />.
+const N = services.items.length;
+const totalVh = 100 + (N - 1) * 72;   // scroll-lock range: ~72vh pro Leistung
+---
+
+<!-- Tall wrapper drives the scroll-lock; inner viewport is pinned -->
+<section id="leistungen" class="services-section relative scroll-mt-28 bg-sky-dawn" style={`height: ${totalVh}vh;`}>
+  <div class="services-sticky sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
+
+    <!-- Header -->
+    <div class="text-center max-w-[680px] mx-auto px-8">
+      <h2 class="text-white font-extrabold leading-[1.08] tracking-[-1.5px]" style="font-size: clamp(30px, 3.6vw, 50px);">
+        {services.headline} <em class="font-['Playfair_Display'] italic font-medium tracking-[-0.5px]">{services.headlineItalic}</em>
+      </h2>
+    </div>
+
+    <!-- Static fallback for prefers-reduced-motion, hidden by default -->
+    <div class="services-static hidden max-w-[820px] mx-auto px-8 mt-10 grid grid-cols-1 md:grid-cols-2 gap-5">
+      {services.items.map((item) => (
+        <div class="rounded-[20px] p-7" style="background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.20);">
+          <h3 class="text-white font-extrabold tracking-[-0.4px] mb-2" style="font-size: 19px;">{item.title}</h3>
+          <p class="text-[14.5px] leading-[1.6] mb-4" style="color: rgba(248,251,255,0.75);">{item.description}</p>
+          <div class="flex flex-wrap gap-2">
+            {item.points.map((p) => (
+              <span class="text-[12px] font-medium px-3 py-1.5 rounded-full" style="background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.22); color: rgba(248,251,255,0.78);">{p}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- The wheel -->
+    <div id="wheel-area" class="services-motion-only relative w-full" style="height: 360px;">
+      <div id="wheel-stage" class="absolute inset-0">
+        {services.items.map((item, i) => (
+          <div class="wheel-card absolute left-1/2" data-i={i} style="top: 30%;">
+            <div
+              class="wheel-tile flex items-center justify-center rounded-[28px]"
+              style="width: 150px; height: 150px; background: rgba(255,255,255,0.10); backdrop-filter: blur(20px) saturate(1.3); -webkit-backdrop-filter: blur(20px) saturate(1.3); border: 1px solid rgba(255,255,255,0.22); box-shadow: 0 18px 40px -16px rgba(10,40,80,0.45); transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;"
+            >
+              <div class="wheel-icon" style="transform: scale(2.6); opacity: 0.9;"><Fragment set:html={item.icon} /></div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- Frosted blur edges, left & right -->
+      <div class="pointer-events-none absolute inset-y-0 left-0 w-[20%] z-[300]" style="backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); -webkit-mask-image: linear-gradient(to right, black 0%, transparent 100%); mask-image: linear-gradient(to right, black 0%, transparent 100%);"></div>
+      <div class="pointer-events-none absolute inset-y-0 right-0 w-[20%] z-[300]" style="backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); -webkit-mask-image: linear-gradient(to left, black 0%, transparent 100%); mask-image: linear-gradient(to left, black 0%, transparent 100%);"></div>
+    </div>
+
+    <!-- Changing text -->
+    <div class="services-motion-only px-8">
+      <div id="wheel-text" class="text-center max-w-[560px] mx-auto" style="transition: opacity 0.4s ease, filter 0.4s ease; min-height: 150px;">
+        <h3 id="wheel-title" class="text-white font-extrabold tracking-[-0.6px] mb-3" style="font-size: clamp(24px, 3vw, 34px);"></h3>
+        <p id="wheel-desc" class="text-[16px] leading-[1.65] mb-6" style="color: rgba(248,251,255,0.66);"></p>
+        <div id="wheel-points" class="flex flex-wrap gap-2 justify-center"></div>
+      </div>
+
+      <!-- Controls — arrows hidden until the section has been fully scrolled through -->
+      <div class="flex items-center justify-center gap-6 mt-6">
+        <button id="wheel-prev" aria-label="Vorherige" class="wheel-arrow w-11 h-11 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300"
+          style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.24); opacity: 0; pointer-events: none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="flex items-center gap-2">
+          {services.items.map((_, i) => (
+            <span class="wheel-dot rounded-full transition-all duration-400" data-i={i}
+              style={`height: 6px; width: ${i === 0 ? '24px' : '6px'}; background: ${i === 0 ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.30)'}; border-radius: 9px;`}></span>
+          ))}
+        </div>
+        <button id="wheel-next" aria-label="Nächste" class="wheel-arrow w-11 h-11 rounded-full flex items-center justify-center text-white cursor-pointer transition-all duration-300"
+          style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.24); opacity: 0; pointer-events: none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .wheel-card {
+    will-change: transform, opacity, filter;
+  }
+  .wheel-card.is-active .wheel-tile {
+    background: rgba(255,255,255,0.20);
+    border-color: rgba(255,255,255,0.45);
+    box-shadow: 0 30px 60px -18px rgba(10,40,80,0.65), inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+  .wheel-card.is-active .wheel-icon { opacity: 1; }
+
+  .wheel-arrow:hover,
+  .wheel-arrow:focus-visible {
+    background: rgba(255, 255, 255, 0.22);
+  }
+  .wheel-arrow:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.7);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .services-section { height: auto !important; }
+    .services-sticky { position: static !important; height: auto !important; padding-block: 8vh; }
+    .services-motion-only { display: none !important; }
+    .services-static { display: grid; }
+  }
+</style>
+
+<script>
+  import { services } from '../data/content';
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    // Reduced motion: the static grid above (rendered server-side) covers all services, skip the wheel entirely.
+  } else {
+  const data = services.items;
+  const N    = data.length;
+
+  const section  = document.getElementById('leistungen')!;
+  const cards    = Array.from(document.querySelectorAll<HTMLElement>('.wheel-card'));
+  const dots     = Array.from(document.querySelectorAll<HTMLElement>('.wheel-dot'));
+  const arrows   = Array.from(document.querySelectorAll<HTMLElement>('.wheel-arrow'));
+  const textEl   = document.getElementById('wheel-text')!;
+  const titleEl  = document.getElementById('wheel-title')!;
+  const descEl   = document.getElementById('wheel-desc')!;
+  const pointsEl = document.getElementById('wheel-points')!;
+
+  const STEP       = 34;
+  const maxVisible = Math.min(2, Math.floor((N - 1) / 2));
+
+  // Cache geometry — read innerWidth once, only refresh on resize
+  let cachedR = window.innerWidth < 640 ? 260 : window.innerWidth < 1024 ? 340 : 400;
+
+  let target      = 0;
+  let cur         = 0;
+  let activeShown = -1;
+  let seenFully   = false;
+  let manual      = false;
+  let rafId       = -1;
+  let scrollPending = false;
+
+  // Cache section metrics so scroll handler never triggers layout
+  let sectionAbsTop = 0;
+  let sectionRange  = 0;
+  function cacheSectionMetrics() {
+    const rect    = section.getBoundingClientRect();
+    sectionAbsTop = window.scrollY + rect.top;
+    sectionRange  = section.offsetHeight - window.innerHeight;
+  }
+
+  function wrapRel(i: number, p: number) {
+    let rel = ((i - p) % N + N) % N;
+    if (rel > N / 2) rel -= N;
+    return rel;
+  }
+
+  function render(p: number) {
+    const R = cachedR;
+    cards.forEach((c, i) => {
+      const rel    = wrapRel(i, p);
+      const a      = rel * STEP;
+      const ar     = (a * Math.PI) / 180;
+      const x      = Math.sin(ar) * R;
+      const y      = (1 - Math.cos(ar)) * R;
+      const abs    = Math.abs(rel);
+      const hidden = abs > maxVisible + 0.5;
+      const scale  = Math.max(0.5, 1 - abs * 0.14);
+      const blur   = abs * 4.5;
+      const op     = hidden ? 0 : Math.max(0, 1 - abs * 0.2);
+      c.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${a}deg) scale(${scale})`;
+      c.style.filter    = `blur(${blur}px)`;
+      c.style.opacity   = String(op);
+      c.style.zIndex    = String(200 - Math.round(abs * 10));
+      c.classList.toggle('is-active', abs < 0.5);
+    });
+    const idx = ((Math.round(p) % N) + N) % N;
+    dots.forEach((d, i) => {
+      d.style.width      = i === idx ? '24px' : '6px';
+      d.style.background = i === idx ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.30)';
+    });
+    if (idx !== activeShown) { activeShown = idx; swapText(idx); }
+  }
+
+  function swapText(i: number) {
+    textEl.style.opacity = '0';
+    textEl.style.filter  = 'blur(8px)';
+    setTimeout(() => {
+      const d = data[i];
+      titleEl.textContent = d.title;
+      descEl.textContent  = d.description;
+      pointsEl.innerHTML  = d.points.map((p: string) =>
+        `<span style="font-size:12.5px;font-weight:500;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.22);color:rgba(248,251,255,0.78);">${p}</span>`
+      ).join('');
+      textEl.style.opacity = '1';
+      textEl.style.filter  = 'blur(0px)';
+    }, 180);
+  }
+
+  // rAF loop — paused while section is off-screen
+  function tick() {
+    cur += (target - cur) * 0.12;
+    if (Math.abs(target - cur) < 0.0005) cur = target;
+    render(cur);
+    rafId = requestAnimationFrame(tick);
+  }
+
+  // Pause/resume loop based on viewport visibility and tab visibility
+  let inViewport = true;
+  const io = new IntersectionObserver(entries => {
+    inViewport = entries[0].isIntersecting;
+    if (inViewport && document.visibilityState === 'visible') {
+      if (rafId === -1) rafId = requestAnimationFrame(tick);
+    } else {
+      cancelAnimationFrame(rafId);
+      rafId = -1;
+    }
+  }, { rootMargin: '200px' });
+  io.observe(section);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && inViewport) {
+      if (rafId === -1) rafId = requestAnimationFrame(tick);
+    } else {
+      cancelAnimationFrame(rafId);
+      rafId = -1;
+    }
+  });
+
+  function onScroll() {
+    if (manual) return;
+    // Use cached absolute position — no getBoundingClientRect call here
+    const scrolled = window.scrollY - sectionAbsTop;
+    const progress = Math.max(0, Math.min(1, scrolled / sectionRange));
+    target = progress * (N - 1);
+    if (progress >= 0.999 && !seenFully) unlock();
+  }
+
+  function unlock() {
+    seenFully = true;
+    arrows.forEach(a => { a.style.opacity = '1'; a.style.pointerEvents = 'auto'; });
+  }
+
+  document.getElementById('wheel-next')!.addEventListener('click', () => { manual = true; target += 1; });
+  document.getElementById('wheel-prev')!.addEventListener('click', () => { manual = true; target -= 1; });
+
+  // Throttle scroll: schedule at most one update per animation frame
+  window.addEventListener('scroll', () => {
+    const fromTop = window.scrollY - sectionAbsTop;
+    if (fromTop >= 0 && fromTop <= sectionRange) manual = false;
+    if (!scrollPending) {
+      scrollPending = true;
+      requestAnimationFrame(() => { onScroll(); scrollPending = false; });
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    cachedR = window.innerWidth < 640 ? 260 : window.innerWidth < 1024 ? 340 : 400;
+    cacheSectionMetrics();
+    render(cur);
+  });
+
+  cacheSectionMetrics();
+  render(0);
+  onScroll();
+  rafId = requestAnimationFrame(tick);
+  }
+</script>
