@@ -29,7 +29,7 @@ export const nav = {
     { label: "Partner", href: "#partner" },
   ],
   cta: {
-    ghost: { label: "ClockIt", href: "" },
+    ghost: { label: "ClockIt", href: "https://clockit-308.netlify.app/" },
     primary: { label: "Termin buchen", href: "#kontakt" },
   },
 };
@@ -286,8 +286,8 @@ export const finalCta = {
   body: "Erzählen Sie uns von Ihrem Vorhaben. Wir melden uns mit einem konkreten ersten Schritt — keine Verkaufsschleife.",
   primary: { label: "Erstgespräch vereinbaren", href: "#kontakt" },
   links: [
-    { label: "ClockIt", href: "" },
-    { label: "Vertex", href: "" },
+    { label: "ClockIt", href: "https://clockit-308.netlify.app/" },
+    { label: "Vertex", href: "https://vertex.de/" },
     { label: "ProConstruct", href: "http://proconstruct.de/" },
   ],
   location: "Gummersbach, Deutschland",
@@ -299,7 +299,7 @@ export const footer = {
     { label: "Leistungen", href: "#leistungen" },
     { label: "Produkte", href: "#produkte" },
     { label: "Partner", href: "#partner" },
-    { label: "ClockIt", href: "" },
+    { label: "ClockIt", href: "https://clockit-308.netlify.app/" },
   ],
   copy: "Digital. Direkt. Durchdacht.",
 };
