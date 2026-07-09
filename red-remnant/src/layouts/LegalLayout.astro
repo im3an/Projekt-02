@@ -1,0 +1,91 @@
+---
+import Layout from './Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  active: 'impressum' | 'agb' | 'datenschutz';
+}
+
+const { title, description, active } = Astro.props;
+
+const tabs = [
+  { key: 'impressum', label: 'Impressum', href: '/impressum' },
+  { key: 'agb', label: 'AGB', href: '/agb' },
+  { key: 'datenschutz', label: 'Datenschutz', href: '/datenschutz' },
+];
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+  <main class="min-h-screen pt-40 pb-28 px-6">
+    <div class="mx-auto" style="max-width: 760px;">
+
+      <nav class="flex flex-wrap gap-6 mb-10" style="border-bottom: 1px solid rgba(255,255,255,0.10); padding-bottom: 20px;">
+        {tabs.map((tab) => (
+          <a
+            href={tab.href}
+            class="text-[14px] font-semibold no-underline transition-colors duration-200"
+            style={tab.key === active
+              ? 'color: #f8fbff;'
+              : 'color: rgba(248,251,255,0.45);'}
+          >
+            {tab.label}
+          </a>
+        ))}
+      </nav>
+
+      <article class="legal-content">
+        <slot />
+      </article>
+
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .legal-content :global(h1) {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #f8fbff;
+    margin-bottom: 8px;
+  }
+  .legal-content :global(.legal-date) {
+    font-size: 13px;
+    color: rgba(248, 251, 255, 0.45);
+    margin-bottom: 40px;
+  }
+  .legal-content :global(h2) {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f8fbff;
+    margin-top: 36px;
+    margin-bottom: 12px;
+  }
+  .legal-content :global(p) {
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(248, 251, 255, 0.72);
+    margin-bottom: 14px;
+  }
+  .legal-content :global(ul) {
+    margin: 0 0 14px 0;
+    padding-left: 20px;
+  }
+  .legal-content :global(li) {
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(248, 251, 255, 0.72);
+    margin-bottom: 6px;
+    list-style: disc;
+  }
+  .legal-content :global(a) {
+    color: #6ab6e4;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+</style>

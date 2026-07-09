@@ -300,6 +300,9 @@ export const footer = {
     { label: "Produkte", href: "#produkte" },
     { label: "Partner", href: "#partner" },
     { label: "ClockIt", href: "https://clockit-308.netlify.app/" },
+    { label: "Impressum", href: "/impressum" },
+    { label: "AGB", href: "/agb" },
+    { label: "Datenschutz", href: "/datenschutz" },
   ],
   copy: "Digital. Direkt. Durchdacht.",
 };
