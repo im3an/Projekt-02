@@ -23,7 +23,12 @@ import { partners } from '../data/content';
             class="partner-badge partner-badge-logo flex items-center justify-center px-8 rounded-[20px] transition-all duration-300 overflow-hidden"
             style="background: #ffffff; box-shadow: 0 12px 32px rgba(0,0,0,0.28); min-width: 200px; height: 96px;"
           >
-            <Image src={p.logo} alt={`${p.name} Logo`} class="partner-logo-img max-h-20 w-auto object-contain transition-transform duration-300" />
+            <Image
+              src={p.logo}
+              alt={`${p.name} Logo`}
+              class="partner-logo-img w-auto object-contain transition-transform duration-300"
+              style={`max-height: ${5 * (p.scale ?? 1)}rem;`}
+            />
           </div>
         ) : (
           <div

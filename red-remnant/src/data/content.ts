@@ -202,7 +202,7 @@ export const partners = {
   body: "Wir arbeiten mit Herstellern, denen wir vertrauen und die wir unseren Kunden empfehlen.",
   items: [
     { name: "G DATA", logo: gdataLogo },
-    { name: "Bechtle", logo: bechtleLogo },
+    { name: "Bechtle", logo: bechtleLogo, scale: 0.65 },
     { name: "Oracle", logo: oracleLogo },
     { name: "HP", logo: hpLogo },
   ],
