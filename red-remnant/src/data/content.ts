@@ -7,6 +7,7 @@ import gdataLogo from '../assets/images/partners/gdata.png';
 import dellLogo from '../assets/images/partners/dell-emc.png';
 import oracleLogo from '../assets/images/partners/oracle-partner-logo.webp';
 import hpLogo from '../assets/images/partners/FY25_HP_Business_Partner.png';
+import bechtleLogo from '../assets/images/partners/Bechtle.webp';
 
 export const brand = {
   name: "IOFDigital",
@@ -201,7 +202,7 @@ export const partners = {
   body: "Wir arbeiten mit Herstellern, denen wir vertrauen und die wir unseren Kunden empfehlen.",
   items: [
     { name: "G DATA", logo: gdataLogo },
-    { name: "Dell", logo: dellLogo },
+    { name: "Bechtle", logo: bechtleLogo },
     { name: "Oracle", logo: oracleLogo },
     { name: "HP", logo: hpLogo },
   ],
